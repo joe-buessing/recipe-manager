@@ -1,6 +1,10 @@
 # Compiled class file
 *.class
 
+# Java-Editor files
+*.~ava
+*.jfm
+
 # Log file
 *.log
 
