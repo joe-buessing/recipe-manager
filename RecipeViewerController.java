@@ -1,4 +1,4 @@
-public class CreateIngredientController {
+public class RecipeViewerController {
   private IngredientSerialization serialization;
 }
 
