@@ -11,15 +11,9 @@ public class IngredientSerialization {
 
     //todo: may want to add a custom path
 
-    public static void main(String[] args) {
-        IngredientSerialization i = new IngredientSerialization();
-
-        i.save(new Ingredient("nameIng", "desc", 2.0, 1, 2, 3, 4));
-    }
-
     public void save(Ingredient ingredient) {
-        saveIngredient(ingredient, System.getProperty("java.io.tmpdir") +
-                "/recipe_manager/ingredient/" + ingredient.getName() + ".json"); // todo: check if name is valid (no illegal characters, etc.)
+        ingredient.setName(new SerializationHelper().makeNameLegal(ingredient.getName()));
+        saveIngredient(ingredient, System.getProperty("java.io.tmpdir") + "/recipe_manager/ingredient/" + ingredient.getName() + ".json");
     }
 
     private void saveIngredient(Ingredient ingredient, String path) {

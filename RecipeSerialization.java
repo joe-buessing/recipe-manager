@@ -1,8 +1,5 @@
 import org.json.JSONArray;
 import org.json.JSONObject;
-import test.Ingredient;
-import test.IngredientSerialization;
-import test.Recipe;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,7 +34,7 @@ public class RecipeSerialization {
             e.printStackTrace();
         }
 
-        List<Ingredient> ing = new ArrayList<>(); //todo: get ingredients from name saved in json(ingredients are saved in json's to)
+        List<Ingredient> ing = new ArrayList<>();
 
         IngredientSerialization ingSer = new IngredientSerialization();
 
@@ -47,15 +44,15 @@ public class RecipeSerialization {
                     tempIngr.getFat(), tempIngr.getCarbohydrates(), tempIngr.getProtein(), tempIngr.getSalt()));
         }
 
-        return new Recipe(obj.getString("name"), obj.getString("description"),
-                obj.getString("preparation"), ing);
+        return new Recipe(obj.getString("name"), obj.getString("description"), obj.getString("preparation"), ing);
     }
 
-    public void saveRecipe(Recipe recipe) {
-        save(recipe, System.getProperty("java.io.tmpdir") + "/recipe_manager/recipe/" + recipe.getName() + ".json"); // todo: check if name is valid (no illegal characters, etc.)
+    public void save(Recipe recipe) {
+        recipe.setName(new SerializationHelper().makeNameLegal(recipe.getName()));
+        saveRecipe(recipe, System.getProperty("java.io.tmpdir") + "/recipe_manager/recipe/" + recipe.getName() + ".json");
     }
 
-    private void save(Recipe recipe, String path) {
+    private void saveRecipe(Recipe recipe, String path) {
         JSONObject obj = new JSONObject();
 
         obj.put("name", recipe.getName());

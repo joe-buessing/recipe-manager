@@ -28,5 +28,9 @@ public class Recipe {
     public List<Ingredient> getIngredients() {
         return ingredients;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
 

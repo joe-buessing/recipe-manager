@@ -44,5 +44,9 @@ public class Ingredient {
     public int getSalt() {
         return salt;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
 
