@@ -8,10 +8,9 @@ import java.util.Properties;
 public class ConfigSerialization {
     public Properties load() {
         Properties p = new Properties();
-        FileReader f = null;
 
         try {
-            p.load(f = new FileReader(System.getProperty("java.io.tmpdir") + "/recipe_manager/config.properties"));
+            p.load(new FileReader(System.getProperty("java.io.tmpdir") + "/recipe_manager/config.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }
