@@ -17,11 +17,19 @@ public class ConfigSerialization {
         return p;
     }
 
-    public void write(Properties p){
+    public void write(Properties p) {
         try {
             p.store(new FileWriter(System.getProperty("java.io.tmpdir") + "/recipe_manager/config.properties"), "Config for recipe-manager");
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void createOnFirstStart() {
+        Properties p = new Properties();
+
+        String path = System.getProperty("java.io.tmpdir") + "/recipe_manager/";
+
+        write(p);
     }
 }

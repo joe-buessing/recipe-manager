@@ -2,50 +2,29 @@ package src.main.java;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import src.main.java.Ingredient;
-import src.main.java.IngredientSerialization;
-import src.main.java.Recipe;
-import src.main.java.SerializationHelper;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
 
 public class RecipeSerialization {
-    private FileWriter file;
+    private final SerializationHelper seHel = new SerializationHelper();
+    private final IngredientSerialization ingSer = new IngredientSerialization();
 
-    public Recipe load(String name) {
-        return loadRecipe(System.getProperty("java.io.tmpdir") + "/recipe_manager/recipe/" + name + ".json"); // todo: check if name is valid (no illegal characters, etc.)
+    public Recipe load(String name, String path) {
+        return loadRecipe(path, name); // todo: check if name is valid (no illegal characters, etc.)
     }
 
-    private Recipe loadRecipe(String path) {
-        StringBuilder data = new StringBuilder();
-        JSONObject obj = null;
-        try {
-            File myObj = new File(path);
-            Scanner scanner = new Scanner(myObj);
+    private Recipe loadRecipe(String path, String name) {
 
-            while (scanner.hasNextLine()) {
-                data.append(scanner.nextLine());
-            }
-
-            scanner.close();
-            obj = new JSONObject(data.toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        JSONObject obj = seHel.loader(path + "recipe/" + name + ".json");
 
         List<Ingredient> ing = new ArrayList<>();
 
         IngredientSerialization ingSer = new IngredientSerialization();
 
         for (int i = 0; i < Objects.requireNonNull(obj).getJSONArray("ingredients").length(); i++) {
-            Ingredient tempIngr = ingSer.load(obj.getJSONArray("ingredients").get(i).toString());
+            Ingredient tempIngr = ingSer.load(obj.getJSONArray("ingredients").get(i).toString(), path);
             ing.add(new Ingredient(tempIngr.getName(), tempIngr.getDescription(), tempIngr.getCalorificValue(),
                     tempIngr.getFat(), tempIngr.getCarbohydrates(), tempIngr.getProtein(), tempIngr.getSalt()));
         }
@@ -54,11 +33,11 @@ public class RecipeSerialization {
     }
 
     public void save(Recipe recipe) {
-        recipe.setName(new SerializationHelper().makeNameLegal(recipe.getName()));
-        saveRecipe(recipe, System.getProperty("java.io.tmpdir") + "/recipe_manager/recipe/", recipe.getName() + ".json");
+        String path = System.getProperty("java.io.tmpdir") + "/recipe_manager/recipe/";
+        saveRecipe(recipe, path);
     }
 
-    private void saveRecipe(Recipe recipe, String path, String fileName) {
+    private void saveRecipe(Recipe recipe, String path) {
         JSONObject obj = new JSONObject();
 
         obj.put("name", recipe.getName());
@@ -70,26 +49,11 @@ public class RecipeSerialization {
 
         for (Ingredient ingr : recipe.getIngredients()) {
             ingrArr.put(ingr.getName());
+            ingSer.save(ingr);
         }
 
         obj.put("ingredients", ingrArr);
 
-        try {
-            File directory = new File(path);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-            file = new FileWriter(new File(directory + "/" + fileName).getAbsoluteFile());
-            file.write(obj.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                file.flush();
-                file.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        seHel.saving(path, obj);
     }
 }

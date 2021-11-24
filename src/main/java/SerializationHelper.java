@@ -3,30 +3,52 @@ package src.main.java;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.regex.Pattern;
+import java.util.Scanner;
 
 public class SerializationHelper {
-    public String makeNameLegal(String input){
-        String[] windowsIllegalNames = {"con", "prn", "aux", "nul", "com1", "com2", "com3", "com4", "com5", "com6", "com7",
-                "com8", "com9", "lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9"};
+    public JSONObject loader(String path){
 
-        Pattern[] illegalChars = {Pattern.compile("<"), Pattern.compile(">"), Pattern.compile(":"), Pattern.compile("\""),
-                Pattern.compile(""), Pattern.compile("\\" + "\\"), Pattern.compile("/"), Pattern.compile("\\|"),
-                Pattern.compile("\\?"), Pattern.compile("\\*")};
+        StringBuilder data = new StringBuilder();
+        JSONObject obj = null;
+        try {
+            File myObj = new File(path);
+            Scanner scanner = new Scanner(myObj);
 
-        StringBuilder inputBuilder = new StringBuilder(input);
-        for (String str : windowsIllegalNames) {
-            if (inputBuilder.toString().equals(str)) {
-                inputBuilder.append("_recipe");
+            while (scanner.hasNextLine()) {
+                data.append(scanner.nextLine());
+            }
+
+            scanner.close();
+            obj = new JSONObject(data.toString());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return  obj;
+    }
+
+    private FileWriter file;
+
+    public void saving(String path, JSONObject obj){
+        try {
+            File directory = new File(path + "");
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+            file = new FileWriter(directory + "/" + obj.get("name").toString() + ".json");
+            file.write(obj.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                file.flush();
+                file.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-        input = inputBuilder.toString();
-        for (Pattern str : illegalChars) {
-            input = input.replaceAll(str.toString(), "");
-        }
-
-        return input;
     }
 }

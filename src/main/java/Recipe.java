@@ -34,5 +34,19 @@ public class Recipe {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        for (Ingredient ingredient : ingredients) {
+            str.append("\t- ").append(ingredient.toString()).append("\n");
+        }
+        return "Recipe{\n" +
+                "- name='" + name + "'\n" +
+                "- description='" + description + "'\n" +
+                "- preparation='" + preparation + "'\n" +
+                "- ingredients:\n" + str +
+                '}';
+    }
 }
 

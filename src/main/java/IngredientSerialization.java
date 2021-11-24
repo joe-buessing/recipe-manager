@@ -2,37 +2,18 @@ package src.main.java;
 
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Scanner;
-
 public class IngredientSerialization {
-    private FileWriter file;
+
+    private final SerializationHelper seHel = new SerializationHelper();
 
     //todo: may want to add a custom path
 
-    public Ingredient load(String name) {
-        return loadIngredient(System.getProperty("java.io.tmpdir") + "/recipe_manager/ingredient/" + name + ".json"); // todo: check if name is valid (no illegal characters, etc.)
+    public Ingredient load(String name, String path) {
+        return loadIngredient(path, name); // todo: check if name is valid (no illegal characters, etc.)
     }
 
-    private Ingredient loadIngredient(String path) {
-        StringBuilder data = new StringBuilder();
-        JSONObject obj = null;
-        try {
-            File myObj = new File(path);
-            Scanner scanner = new Scanner(myObj);
-
-            while (scanner.hasNextLine()) {
-                data.append(scanner.nextLine());
-            }
-
-            scanner.close();
-            obj = new JSONObject(data.toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    private Ingredient loadIngredient(String path, String name) {
+        JSONObject obj = seHel.loader(path + "/ingredient/" + name + ".json");
 
         assert obj != null;
         return new Ingredient(obj.getString("name"), obj.getString("description"),
@@ -41,11 +22,11 @@ public class IngredientSerialization {
     }
 
     public void save(Ingredient ingredient) {
-        ingredient.setName(new SerializationHelper().makeNameLegal(ingredient.getName()));
-        saveIngredient(ingredient, System.getProperty("java.io.tmpdir") + "/recipe_manager/ingredient/", ingredient.getName() + ".json");
+        String path = System.getProperty("java.io.tmpdir") + "/recipe_manager/ingredient/";
+        saveIngredient(ingredient, path); // TODO: 24/11/2021 get path from config
     }
 
-    private void saveIngredient(Ingredient ingredient, String path, String fileName) {
+    private void saveIngredient(Ingredient ingredient, String path) {
         JSONObject obj = new JSONObject();
 
         obj.put("name", ingredient.getName());
@@ -56,22 +37,6 @@ public class IngredientSerialization {
         obj.put("protein", ingredient.getProtein());
         obj.put("salt", ingredient.getSalt());
 
-        try {
-            File directory = new File(path);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-            file = new FileWriter(new File(directory + "/" + fileName).getAbsoluteFile());
-            file.write(obj.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                file.flush();
-                file.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        seHel.saving(path, obj);
     }
 }

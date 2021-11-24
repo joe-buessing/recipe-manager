@@ -50,5 +50,18 @@ public class Ingredient {
     public int getSalt() {
         return salt;
     }
+
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", calorificValue=" + calorificValue +
+                ", fat=" + fat +
+                ", carbohydrates=" + carbohydrates +
+                ", protein=" + protein +
+                ", salt=" + salt +
+                '}';
+    }
 }
 
