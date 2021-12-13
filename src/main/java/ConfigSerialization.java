@@ -1,5 +1,6 @@
 package src.main.java;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,10 +27,18 @@ public class ConfigSerialization {
     }
 
     public void createOnFirstStart() {
-        Properties p = new Properties();
+        if (!new File(System.getProperty("java.io.tmpdir") + "/recipe_manager/config.properties").exists()) {
+            Properties p = new Properties();
 
-        String path = System.getProperty("java.io.tmpdir") + "/recipe_manager/";
+            // TODO: 29/11/2021 set first config
+            p.setProperty("path", System.getProperty("java.io.tmpdir") + "/recipe_manager/");
+            p.setProperty("hw", "Hello World!");
 
-        write(p);
+            File directory = new File(System.getProperty("java.io.tmpdir") + "/recipe_manager/");
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+            write(p);
+        }
     }
 }

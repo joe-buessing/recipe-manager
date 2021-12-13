@@ -11,6 +11,7 @@ public class RecipeSerialization {
     private final SerializationHelper seHel = new SerializationHelper();
     private final IngredientSerialization ingSer = new IngredientSerialization();
 
+
     public Recipe load(String name, String path) {
         return loadRecipe(path, name); // todo: check if name is valid (no illegal characters, etc.)
     }
@@ -31,13 +32,13 @@ public class RecipeSerialization {
 
         return new Recipe(obj.getString("name"), obj.getString("description"), obj.getString("preparation"), ing);
     }
+    private final String path = new ConfigSerialization().load().getProperty("path");
 
     public void save(Recipe recipe) {
-        String path = System.getProperty("java.io.tmpdir") + "/recipe_manager/recipe/";
-        saveRecipe(recipe, path);
+        saveRecipe(path, recipe);
     }
 
-    private void saveRecipe(Recipe recipe, String path) {
+    private void saveRecipe(String path, Recipe recipe) {
         JSONObject obj = new JSONObject();
 
         obj.put("name", recipe.getName());
@@ -54,6 +55,6 @@ public class RecipeSerialization {
 
         obj.put("ingredients", ingrArr);
 
-        seHel.saving(path, obj);
+        seHel.saving(path + "/recipe/", obj);
     }
 }

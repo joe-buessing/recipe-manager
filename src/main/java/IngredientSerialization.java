@@ -6,8 +6,6 @@ public class IngredientSerialization {
 
     private final SerializationHelper seHel = new SerializationHelper();
 
-    //todo: may want to add a custom path
-
     public Ingredient load(String name, String path) {
         return loadIngredient(path, name); // todo: check if name is valid (no illegal characters, etc.)
     }
@@ -21,9 +19,10 @@ public class IngredientSerialization {
                 obj.getInt("protein"), obj.getInt("salt"));
     }
 
+    private final String path = new ConfigSerialization().load().getProperty("path");
+
     public void save(Ingredient ingredient) {
-        String path = System.getProperty("java.io.tmpdir") + "/recipe_manager/ingredient/";
-        saveIngredient(ingredient, path); // TODO: 24/11/2021 get path from config
+        saveIngredient(ingredient, path + "/ingredient/"); // TODO: 24/11/2021 get path from config
     }
 
     private void saveIngredient(Ingredient ingredient, String path) {
