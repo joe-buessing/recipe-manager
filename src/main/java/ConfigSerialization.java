@@ -40,4 +40,9 @@ public class ConfigSerialization {
             write(p);
         }
     }
+
+    public boolean doesExist(){
+        File directory = new File(System.getProperty("java.io.tmpdir") + "/recipe_manager/");
+        return directory.exists();
+    }
 }

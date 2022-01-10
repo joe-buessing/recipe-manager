@@ -46,6 +46,10 @@ public class MainGui extends JFrame {
     }
 
     public static void main(String[] args) {
+        ConfigSerialization conf = new ConfigSerialization();
+        if (!conf.doesExist())
+            conf.createOnFirstStart();
+
         new MainGui();
     }
 
