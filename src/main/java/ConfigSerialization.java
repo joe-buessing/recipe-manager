@@ -32,7 +32,6 @@ public class ConfigSerialization {
 
             // TODO: 29/11/2021 set first config
             p.setProperty("path", System.getProperty("java.io.tmpdir") + "/recipe_manager/");
-            p.setProperty("hw", "Hello World!");
 
             File directory = new File(System.getProperty("java.io.tmpdir") + "/recipe_manager/");
             if (!directory.exists()) {
