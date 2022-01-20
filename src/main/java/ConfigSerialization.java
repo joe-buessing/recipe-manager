@@ -30,7 +30,6 @@ public class ConfigSerialization {
         if (!new File(System.getProperty("java.io.tmpdir") + "/recipe_manager/config.properties").exists()) {
             Properties p = new Properties();
 
-            // TODO: 29/11/2021 set first config
             p.setProperty("path", System.getProperty("java.io.tmpdir") + "/recipe_manager/");
 
             File directory = new File(System.getProperty("java.io.tmpdir") + "/recipe_manager/");
@@ -41,8 +40,7 @@ public class ConfigSerialization {
         }
     }
 
-    public boolean doesExist(){
-        File directory = new File(System.getProperty("java.io.tmpdir") + "/recipe_manager/");
-        return directory.exists();
+    public boolean doesExist() {
+        return new File(System.getProperty("java.io.tmpdir") + "/recipe_manager/").exists();
     }
 }

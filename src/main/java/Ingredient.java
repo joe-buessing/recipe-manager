@@ -2,12 +2,12 @@ package src.main.java;
 
 public class Ingredient {
     private String name;
-    private String description;
-    private double calorificValue;
-    private int fat;
-    private int carbohydrates;
-    private int protein;
-    private int salt;
+    private final String description;
+    private final double calorificValue;
+    private final int fat;
+    private final int carbohydrates;
+    private final int protein;
+    private final int salt;
 
     public Ingredient(String name, String description, double calorificValue, int fat, int carbohydrates, int protein, int salt) {
         this.name = name;
